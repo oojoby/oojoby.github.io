@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Sign In with Pact</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-deep_purple.min.css" />
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+</head>
+<style>
+  body,
+  html {
+    height: 100%;
+    background-color: #f9f9f9;
+  }
+
+  .login-container {
+    position: relative;
+    height: 100%;
+    /* width: 90%; */
+    margin: 0 auto;
+  }
+
+  .login-box {
+    /* position: absolute;
+    top: 45%;
+    transform: translateY(-50%); */
+    /* padding: 15px; */
+    margin-top: 75px;
+  }
+
+  .login-header {
+    text-align: center;
+    height: 100px;
+    background-color: #4C3FFB;
+    color: white;
+  }
+
+  .logoWrapper {
+    padding-top: 50px;
+  }
+
+  .title {
+    margin: 0;
+    padding-top: 10px;
+    display: inline;
+  }
+
+  .login-header img {
+    width: 20px;
+    display: inline;
+    position: absolute;
+    left: 20px;
+  }
+
+  #error-message {
+    display: none;
+  }
+
+  .faceId {
+    width: 25px;
+    float: right;
+  }
+
+  #btn-login {
+    margin-bottom: 15px;
+    margin-top: 20px;
+    background-color: #4C3FFB;
+    width: 300px;
+    border-radius: 20px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  #btn-signup {
+    background-color: white;
+    color: #4C3FFB;
+    border-color: #4C3FFB;
+    width: 300px;
+    border-radius: 20px;
+    margin: 0 auto;
+    display: block;
+    margin-top: 20px;
+  }
+
+  .forgotPassword {
+    text-align: center;
+    display: block;
+    margin-top: 20px;
+    color: #4C3FFB;
+  }
+
+  /* material overrides  */
+
+  .mdl-textfield {
+    /* width: 250px; */
+    display: block;
+    margin: 0 auto;
+  }
+
+  .buttonWrapper {
+    margin-top: 20px;
+  }
+</style>
+
+<body>
+  <div class="login-header">
+    <!-- <img src="https://oojoby.github.io/assets/pactLogo.png" /> -->
+    <div class='logoWrapper'>
+      <img src="https://oojoby.github.io/assets/whiteP.png" alt="">
+      <p class='title'>login into Pact</p>
+    </div>
+  </div>
+  <div class="login-container">
+    <div class="col-xs-12 col-sm-4 col-sm-offset-4 login-box">
+      <div id="error-message" class="alert alert-danger"></div>
+
+      <form onsubmit="return false;" method="post">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <img class='faceId' src="https://oojoby.github.io/assets/faceidTry.png" alt="">
+          <input class="mdl-textfield__input" type="username" id="email">
+          <label class="mdl-textfield__label" for="email">Enter your email</label>
+        </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input class="mdl-textfield__input" type="password" id="password">
+          <label class="mdl-textfield__label" for="password">Password</label>
+        </div>
+        <div class='buttonWrapper'>
+          <button type="submit" id="btn-login" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            Login
+          </button>
+          <button type="button" id="btn-signup" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            Create account
+          </button>
+        </div>
+        <a href='' class='forgotPassword'>Forgot your password</a>
+      </form>
+
+      <!-- <form onsubmit="return false;" method="post">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" id="email" placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" placeholder="Enter your password">
+        </div>
+        <button type="submit" id="btn-login" class="btn btn-primary btn-block">
+          Login
+        </button>
+        <button type="button" id="btn-signup" class="btn btn-default btn-block">
+          Create an account
+        </button>
+      </form> -->
+    </div>
+  </div>
+
+  <!--[if IE 8]>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ie8/0.2.5/ie8.js"></script>
+  <![endif]-->
+
+  <!--[if lte IE 9]>
+  <script src="https://cdn.auth0.com/js/polyfills/1.0/base64.min.js"></script>
+  <script src="https://cdn.auth0.com/js/polyfills/1.0/es5-shim.min.js"></script>
+  <![endif]-->
+
+  <script src="https://cdn.auth0.com/js/auth0/9.2/auth0.min.js"></script>
+  <script src="https://cdn.auth0.com/js/polyfills/1.0/object-assign.min.js"></script>
+  <script>
+    window.addEventListener('load', function () {
+
+      var config = JSON.parse(
+        decodeURIComponent(escape(window.atob('@@config@@')))
+      );
+
+      var params = Object.assign({
+        domain: config.auth0Domain,
+        clientID: config.clientID,
+        redirectUri: config.callbackURL,
+        responseType: 'code'
+      }, config.internalOptions);
+
+      var webAuth = new auth0.WebAuth(params);
+
+      var databaseConnection = 'Username-Password-Authentication';
+
+      function login(e) {
+        e.preventDefault();
+        var username = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        webAuth.login({
+          realm: databaseConnection,
+          username: username,
+          password: password
+        }, function (err) {
+          if (err) displayError(err);
+        });
+      }
+
+      function signup() {
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+
+        webAuth.redirect.signupAndLogin({
+          connection: databaseConnection,
+          email: email,
+          password: password
+        }, function (err) {
+          if (err) displayError(err);
+        });
+      }
+
+      function displayError(err) {
+        var errorMessage = document.getElementById('error-message');
+        errorMessage.innerHTML = err.description;
+        errorMessage.style.display = 'block';
+      }
+
+      document.getElementById('btn-login').addEventListener('click', login);
+      document.getElementById('btn-signup').addEventListener('click', signup);
+    });
+  </script>
+</body>
+
+</html>
